@@ -1,9 +1,8 @@
 package com.example.bankservice.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -19,7 +18,9 @@ public class Account {
 
     private Double balance;
 
-    @OneToOne
-    @JoinColumn(name = "card_id")
-    private Card card;
+//    @OneToOne
+//    @JoinColumn(name = "card_id")
+//    @JsonBackReference
+//    @JsonIgnore
+//    private Card card;
 }

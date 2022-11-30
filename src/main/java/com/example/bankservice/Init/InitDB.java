@@ -1,4 +1,4 @@
-package com.example.bankservice.DB;
+package com.example.bankservice.Init;
 
 
 import com.example.bankservice.model.Card;

@@ -1,56 +1,35 @@
 package com.example.bankservice.controller;
 
-import com.example.bankservice.DAO.CardDAO;
-import com.example.bankservice.DAO.JwtResponse;
-import com.example.bankservice.repository.CardRepository;
-import com.example.bankservice.security.jwt.JwtUtils;
-import com.example.bankservice.security.services.CardDetailsImpl;
+import com.example.bankservice.service.CardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class BankController {
 
-    @Autowired
-    private final AuthenticationManager authenticationManager;
+    private final CardService cardService;
+    @GetMapping("/validate")
+    public ResponseEntity<Boolean> validateCard(@RequestParam String cardNumber) {
+        return ResponseEntity.ok(cardService.validateCard(cardNumber));
+    }
 
-    @Autowired
-    private final CardRepository cardRepository;
+    @PostMapping("/deposit")
+    public ResponseEntity<?> deposit(@RequestParam Double amount) {
+        return null;
+    }
 
-    @Autowired
-    private final PasswordEncoder encoder;
-    @Autowired
-    private final JwtUtils jwtUtils;
+    @PostMapping("/withdraw")
+    public ResponseEntity<?> withdraw(@RequestParam Double amount) {
+        return null;
+    }
 
-    @PostMapping("/auth")
-    public ResponseEntity<?> authenticateUser(@RequestBody CardDAO cardDAO) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(cardDAO.getCardNumber(), cardDAO.getPin()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        CardDetailsImpl userDetails = (CardDetailsImpl) authentication.getPrincipal();
-        return ResponseEntity.ok(
-                JwtResponse.builder()
-                    .token(jwt)
-                    .id(userDetails.getCard().getId())
-                    .cardNumber(userDetails.getUsername())
-                    .build()
-        );
+    @GetMapping("/checkBalance")
+    public ResponseEntity<Double> checkBalance() {
+        return null;
     }
 }

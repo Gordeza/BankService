@@ -60,12 +60,14 @@ public class WebSecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.cors()
             .and().csrf().disable()
-        .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
             .and()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-        .authorizeRequests().antMatchers("/auth").permitAll()
-        .anyRequest().authenticated();
+            .authorizeRequests().antMatchers("/auth").permitAll()
+            .and()
+            .authorizeRequests().antMatchers("/validate").permitAll()
+            .anyRequest().authenticated();
     
     http.authenticationProvider(authenticationProvider());
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  db:
+    container_name: db-server
+    image: mysql:latest
+    restart: always
+    networks:
+      - test
+    environment:
+      MYSQL_DATABASE: egs_bank_service
+      MYSQL_USER: root
+      MYSQL_PASSWORD: MySQL123
+      MYSQL_ROOT_PASSWORD: MySQL123
+    ports:
+      - "3306:3306"
+networks:
+  test:
+    external:
+      name: springboottest_default

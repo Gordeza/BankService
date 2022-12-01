@@ -1,16 +1,14 @@
 package com.example.bankservice.controller;
 
+import com.example.bankservice.exception.CardLockedException;
+import com.example.bankservice.exception.InvalidCardException;
 import com.example.bankservice.model.Card;
 import com.example.bankservice.security.services.CardDetailsImpl;
 import com.example.bankservice.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -20,7 +18,7 @@ public class BankController {
 
     private final CardService cardService;
     @GetMapping("/validate")
-    public ResponseEntity<Boolean> validateCard(@RequestParam String cardNumber) {
+    public ResponseEntity<?> validateCard(@RequestParam String cardNumber) throws InvalidCardException, CardLockedException {
         return ResponseEntity.ok(cardService.validateCard(cardNumber));
     }
 
@@ -33,12 +31,18 @@ public class BankController {
     @PostMapping("/withdraw")
     public ResponseEntity<?> withdraw(Principal principal, @RequestParam Double amount) {
         Card card = ((CardDetailsImpl) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getCard();
-        return ResponseEntity.ok("2");
+        return ResponseEntity.ok(cardService.withdraw(card, amount));
     }
 
     @GetMapping("/balance")
     public ResponseEntity<?> checkBalance(Principal principal) {
         Card card = ((CardDetailsImpl) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getCard();
-        return ResponseEntity.ok("3");
+        return ResponseEntity.ok(cardService.balance(card));
     }
+
+//    @PutMapping("/updatePin")
+//    public ResponseEntity<?> updatePin(Principal principal, @RequestParam String pin) {
+//        Card card = ((CardDetailsImpl) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getCard();
+//        return ResponseEntity.ok(cardService.updatePin(card, pin));
+//    }
 }

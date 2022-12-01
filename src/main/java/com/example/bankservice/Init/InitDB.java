@@ -30,6 +30,7 @@ public class InitDB {
                 .expMonth("05")
                 .expYear("25")
                 .pin(passwordEncoder.encode("1234"))
+                .failedAttempts(0)
                 .isNotLocked(true)
                 .build());
         cards.add(Card.builder()
@@ -37,6 +38,7 @@ public class InitDB {
                 .expMonth("10")
                 .expYear("24")
                 .pin(passwordEncoder.encode("1234"))
+                .failedAttempts(0)
                 .isNotLocked(true)
                 .build());
         cards.add(Card.builder()
@@ -44,6 +46,7 @@ public class InitDB {
                 .expMonth("01")
                 .expYear("26")
                 .pin(passwordEncoder.encode("0000"))
+                .failedAttempts(0)
                 .isNotLocked(false)
                 .build());
         cardRepository.saveAll(cards);

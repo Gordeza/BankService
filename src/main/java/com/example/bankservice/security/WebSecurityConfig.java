@@ -3,6 +3,7 @@ package com.example.bankservice.security;
 import com.example.bankservice.security.jwt.AuthEntryPointJwt;
 import com.example.bankservice.security.jwt.AuthTokenFilter;
 import com.example.bankservice.security.services.CardDetailsServiceImpl;
+import com.example.bankservice.security.services.SecurityBeans;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,11 +25,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
     prePostEnabled = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-  @Autowired
   private final CardDetailsServiceImpl cardDetailsService;
 
-  @Autowired
   private final AuthEntryPointJwt unauthorizedHandler;
+
+  private final PasswordEncoder passwordEncoder;
 
   @Bean
   public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -39,7 +40,7 @@ public class WebSecurityConfig {
   public DaoAuthenticationProvider authenticationProvider() {
       DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
       authProvider.setUserDetailsService(cardDetailsService);
-      authProvider.setPasswordEncoder(passwordEncoder());
+      authProvider.setPasswordEncoder(passwordEncoder);
       return authProvider;
   }
 
@@ -49,17 +50,12 @@ public class WebSecurityConfig {
     return authConfig.getAuthenticationManager();
   }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return NoOpPasswordEncoder.getInstance();
-//    return new BCryptPasswordEncoder();
-  }
-
   
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.cors()
-            .and().csrf().disable()
+            .and()
+            .csrf().disable()
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

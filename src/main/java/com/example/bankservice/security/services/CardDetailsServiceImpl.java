@@ -1,6 +1,7 @@
 package com.example.bankservice.security.services;
 
 
+import com.example.bankservice.exception.InvalidCardException;
 import com.example.bankservice.model.Card;
 import com.example.bankservice.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,9 @@ public class CardDetailsServiceImpl implements UserDetailsService {
   @Override
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Card card = cardRepository.findByCardNumber(username);
-    if(card == null) throw new UsernameNotFoundException("Card Not Found with number: " + username);
-
+    Card card = cardRepository.findByCardNumber(username).orElseThrow(
+            () -> new UsernameNotFoundException("Card Not Found with number: " + username)
+    );
     return new CardDetailsImpl(card);
   }
 

@@ -1,5 +1,7 @@
 package com.example.bankservice.model;
 
+import com.example.bankservice.DAO.TransactionStatus;
+import com.example.bankservice.DAO.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,13 +20,19 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Double amount;
+
+    private Date date;
+
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
 
-    private String transactionType;
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
 
-    private Double amount;
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;
 
-    private Date date;
+
 }

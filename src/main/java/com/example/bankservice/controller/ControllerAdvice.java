@@ -21,7 +21,6 @@ public class ControllerAdvice {
     public ExceptionMessage amountExceeded(AmountExceededException ex, WebRequest request) {
         return new ExceptionMessage(
                 HttpStatus.METHOD_NOT_ALLOWED.value(),
-                new Date(),
                 ex.getMessage(),
                 request.getDescription(false));
     }
@@ -31,7 +30,6 @@ public class ControllerAdvice {
     public ExceptionMessage cardLocked(CardLockedException ex, WebRequest request) {
         return new ExceptionMessage(
                 HttpStatus.LOCKED.value(),
-                new Date(),
                 ex.getMessage(),
                 request.getDescription(false));
     }
@@ -41,7 +39,6 @@ public class ControllerAdvice {
     public ExceptionMessage invalidCard(InvalidCardException ex, WebRequest request) {
         return new ExceptionMessage(
                 HttpStatus.NOT_FOUND.value(),
-                new Date(),
                 ex.getMessage(),
                 request.getDescription(false));
     }

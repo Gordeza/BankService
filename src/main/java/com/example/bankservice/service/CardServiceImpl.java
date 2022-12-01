@@ -50,6 +50,9 @@ public class CardServiceImpl implements CardService{
     @Override
 //    @Transactional
     public Transaction deposit(Card card, Double amount) {
+        if(!card.getIsNotLocked()) {
+            throw new CardLockedException("Card is locked");
+        }
         Account account = card.getAccount();
         account.setBalance(account.getBalance() + amount);
         accountService.save(account);
@@ -68,6 +71,9 @@ public class CardServiceImpl implements CardService{
     @Override
 //    @Transactional
     public Transaction withdraw(Card card, Double amount) {
+        if(!card.getIsNotLocked()) {
+            throw new CardLockedException("Card is locked");
+        }
         Account account = card.getAccount();
         if(account.getBalance() < amount) {
             Transaction transactionFailed =
@@ -97,6 +103,9 @@ public class CardServiceImpl implements CardService{
 
     @Override
     public Double balance(Card card) {
+        if(!card.getIsNotLocked()) {
+            throw new CardLockedException("Card is locked");
+        }
         Account account = card.getAccount();
         Transaction transaction =
                 Transaction.builder()

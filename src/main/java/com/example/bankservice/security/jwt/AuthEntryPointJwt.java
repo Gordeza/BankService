@@ -44,7 +44,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
           card.setIsNotLocked(false);
         cardService.save(card);
       }
-    } catch (InvalidCardException ignored) {
+    } catch (Exception ignored) {
     }
     logger.error("Unauthorized error: {}", authException.getMessage());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -53,7 +53,6 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
     final ObjectMapper mapper = new ObjectMapper();
     mapper.writeValue(response.getOutputStream(), new ExceptionMessage(
             HttpServletResponse.SC_UNAUTHORIZED,
-            new Date(),
             authException.getMessage(),
             request.getServletPath()));
   }

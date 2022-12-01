@@ -10,3 +10,6 @@ spring:
       ddl-auto: create-drop
 server:
   port: 8081
+bank-service-key:
+  header: EGS_HEADER
+  token: secret_key_EGS
